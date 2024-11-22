@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Marketplace from './Marketplace';
 import Analysis from './Analysis';
+
+
 const translations = {
     en: {
         welcome: "Welcome to FarmSmart",
@@ -106,6 +108,27 @@ const Dashboard = ({ user, onLogout, currentLang = 'en' }) => {
     setCurrentView(view);
   };
 
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'home':
+        return (
+          <DashboardHome 
+            t={t} 
+            userName={userName} 
+            onNavigate={handleNavigate}
+          />
+        );
+      case 'marketplace':
+        return <Marketplace user={user} />;
+      case 'analysis':
+        return <Analysis />;
+      case 'community':
+        return <Community />;
+      default:
+        return <DashboardHome t={t} userName={userName} onNavigate={handleNavigate} />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <nav className="bg-white shadow">
@@ -129,22 +152,7 @@ const Dashboard = ({ user, onLogout, currentLang = 'en' }) => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          {currentView === 'home' && (
-            <DashboardHome 
-              t={t} 
-              userName={userName} 
-              onNavigate={handleNavigate}
-            />
-          )}
-          {currentView === 'marketplace' && (
-            <Marketplace user={user} />
-          )}
-          {currentView === 'analysis' && (
-            <div>Analysis Component Coming Soon...</div>
-          )}
-          {currentView === 'community' && (
-            <div>Community Component Coming Soon...</div>
-          )}
+          {renderCurrentView()}
         </div>
       </div>
     </div>
