@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Dashboard from './components/Dashboard';
+import Button from './components/Button';
+import Card from './components/Card';
+import { BrowserRouter } from 'react-router-dom';
+import Navbar from './components/Navbar';
 
-// Complete translations object for both languages
 const translations = {
   en: {
     nav: {
@@ -86,11 +90,11 @@ const translations = {
     nav: {
       solutions: "समाधान",
       company: "कंपनी",
-      contact: "संपर्क"
+      contact: "संपर्क करें"
     },
     hero: {
       title: "कृषि अपशिष्ट को टिकाऊ लाभ में बदलें",
-      subtitle: "एआई की शक्ति का उपयोग करके अपने खेत की उत्पादकता को अनुकूलित करें और एक हरित भविष्य में योगदान करें।",
+      subtitle: "हरित भविष्य में योगदान करते हुए अपने खेत की उत्पादकता को बेहतर बनाने के लिए AI की शक्ति का उपयोग करें।",
       getStarted: "शुरू करें →",
       watchDemo: "डेमो देखें"
     },
@@ -100,32 +104,32 @@ const translations = {
       { number: '10k+', label: 'किसानों की मदद की' }
     ],
     features: {
-      title: "आधुनिक खेती के लिए बुद्धिमान समाधान",
+      title: "आधुनिक कृषि के लिए बुद्धिमान समाधान",
       items: [
         {
           icon: "🌱",
-          title: 'एआई-संचालित विश्लेषण',
-          description: 'मिट्टी की स्वास्थ्य और जलवायु पैटर्न का विश्लेषण करने वाले उन्नत एल्गोरिदम से वास्तविक समय की अंतर्दृष्टि'
+          title: 'AI-संचालित विश्लेषण',
+          description: 'मिट्टी के स्वास्थ्य और जलवायु पैटर्न का विश्लेषण करने वाले उन्नत एल्गोरिदम से वास्तविक समय की अंतर्दृष्टि'
         },
         {
           icon: "📊",
           title: 'स्मार्ट सिफारिशें',
-          description: 'इष्टतम नरवाई प्रबंधन और संसाधन उपयोग के लिए व्यक्तिगत सुझाव'
+          description: 'नरवाई प्रबंधन और संसाधन उपयोग के लिए व्यक्तिगत सुझाव'
         },
         {
           icon: "👥",
-          title: 'सामुदायिक समर्थन',
-          description: 'स्थानीय किसानों से जुड़ें और सरकारी प्रोत्साहन कार्यक्रमों तक पहुंच प्राप्त करें'
+          title: 'समुदाय समर्थन',
+          description: 'स्थानीय किसानों से जुड़ें और सरकारी प्रोत्साहन कार्यक्रमों तक पहुंचें'
         }
       ]
     },
     cta: {
-      title: "अपने खेत को क्रांतिकारी बनाने के लिए तैयार हैं?",
-      subtitle: "हमारे एआई-संचालित प्लेटफॉर्म से लाभान्वित हजारों किसानों से जुड़ें",
+      title: "अपने खेत में क्रांति लाने के लिए तैयार हैं?",
+      subtitle: "हमारे AI-संचालित प्लेटफॉर्म से लाभान्वित हजारों किसानों से जुड़ें",
       button: "अभी शुरू करें →"
     },
     footer: {
-      tagline: "एआई द्वारा संचालित टिकाऊ कृषि समाधान",
+      tagline: "AI द्वारा संचालित स्थायी कृषि समाधान",
       solutions: {
         title: "समाधान",
         items: ["मिट्टी विश्लेषण", "उपज अनुकूलन", "अपशिष्ट प्रबंधन"]
@@ -143,15 +147,15 @@ const translations = {
       login: {
         title: "वापसी पर स्वागत है",
         subtitle: "अपने खाते तक पहुंचने के लिए अपनी जानकारी दर्ज करें",
-        button: "लॉग इन",
+        button: "लॉग इन करें",
         altText: "खाता नहीं है?",
         altAction: "साइन अप करें"
       },
       signup: {
         title: "खाता बनाएं",
-        subtitle: "अपने खेत को अनुकूलित करना शुरू करने के लिए पंजीकरण करें",
-        button: "साइन अप",
-        altText: "पहले से ही खाता है?",
+        subtitle: "अपना खेत ऑप्टिमाइज़ करना शुरू करने के लिए रजिस्टर करें",
+        button: "साइन अप करें",
+        altText: "पहले से खाता है?",
         altAction: "लॉग इन करें"
       },
       fields: {
@@ -165,27 +169,14 @@ const translations = {
 };
 
 function App() {
-  // Initialize language from localStorage
-  const [currentLang, setCurrentLang] = useState(() => {
-    return localStorage.getItem('preferredLanguage') || 'en';
-  });
-
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [mode, setMode] = useState('login');
+  const [currentLang, setCurrentLang] = useState('en');
   const [hoveredCard, setHoveredCard] = useState(null);
 
-  // Persist language selection
-  useEffect(() => {
-    localStorage.setItem('preferredLanguage', currentLang);
-  }, [currentLang]);
-
   const t = translations[currentLang];
-
-  const handleLanguageChange = (newLang) => {
-    setCurrentLang(newLang);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -202,206 +193,169 @@ function App() {
     setIsAuthenticated(false);
   };
 
-  const Navbar = () => (
-    <nav className="bg-white shadow-lg">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <span className="text-2xl">🌿</span>
-            <span className="text-xl font-bold text-green-800">FarmSmart</span>
-          </div>
-          <div className="flex items-center space-x-6">
-            <select
-              value={currentLang}
-              onChange={(e) => handleLanguageChange(e.target.value)}
-              className="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              <option value="en">English</option>
-              <option value="hi">हिंदी</option>
-            </select>
-            {isAuthenticated && (
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                {currentLang === 'en' ? 'Logout' : 'लॉग आउट'}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
+  if (isAuthenticated && user) {
+    return (
+      <BrowserRouter>
+        <Dashboard user={user} onLogout={handleLogout} currentLang={currentLang} />
+      </BrowserRouter>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Navbar />
-
-      {isAuthenticated ? (
-        // Dashboard View
-        <div className="container mx-auto px-6 py-8">
-          <h1 className="text-3xl font-bold text-green-900 mb-8">
-            {currentLang === 'en' ? 'Welcome' : 'स्वागत है'}, {user.email}!
-          </h1>
-          {/* Add your dashboard content here */}
+      <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
+      
+      {/* Hero Section */}
+      <header className="relative overflow-hidden bg-gradient-to-r from-green-900 via-green-700 to-green-800">
+        <div className="absolute inset-0 bg-[url('/api/placeholder/1200/800')] opacity-10 bg-center bg-cover" />
+        <div className="container mx-auto px-6 py-24 relative">
+          <div className="max-w-3xl space-y-8">
+            <h1 className="text-5xl font-bold text-white leading-tight">
+              {t.hero.title}
+            </h1>
+            <p className="text-xl text-green-100 leading-relaxed">
+              {t.hero.subtitle}
+            </p>
+            <div className="flex gap-4 flex-wrap">
+              <Button 
+                variant="white" 
+                className="text-lg font-semibold"
+                onClick={() => setIsAuthModalOpen(true)}
+              >
+                {t.hero.getStarted}
+              </Button>
+              <Button variant="outline" className="text-lg text-white">
+                {t.hero.watchDemo}
+              </Button>
+            </div>
+          </div>
         </div>
-      ) : (
-        // Landing Page View
-        <>
-          {/* Hero Section */}
-          <header className="relative overflow-hidden bg-gradient-to-r from-green-900 via-green-700 to-green-800">
-            <div className="container mx-auto px-6 py-24">
-              <div className="max-w-3xl space-y-8">
-                <h1 className="text-5xl font-bold text-white leading-tight">
-                  {t.hero.title}
-                </h1>
-                <p className="text-xl text-green-100 leading-relaxed">
-                  {t.hero.subtitle}
+      </header>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-white bg-opacity-90 backdrop-blur-lg">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8">
+            {t.stats.map((stat, index) => (
+              <div key={index} className="text-center space-y-2">
+                <div className="text-4xl font-bold text-green-700">{stat.number}</div>
+                <div className="text-gray-600">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-24">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-16 text-green-900">
+            {t.features.title}
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {t.features.items.map((feature, index) => (
+              <Card
+                key={index}
+                className={`transition-all duration-300 ${
+                  hoveredCard === index ? 'transform -translate-y-2' : ''
+                }`}
+                onMouseEnter={() => setHoveredCard(index)}
+                onMouseLeave={() => setHoveredCard(null)}
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-bold text-green-800 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {feature.description}
                 </p>
-                <div className="flex gap-4 flex-wrap">
-                  <button
-                    onClick={() => setIsAuthModalOpen(true)}
-                    className="px-6 py-3 bg-white text-green-800 rounded-lg hover:bg-gray-100 transition-colors text-lg font-semibold"
-                  >
-                    {t.hero.getStarted}
-                  </button>
-                  <button className="px-6 py-3 border-2 border-white text-white rounded-lg hover:bg-white hover:text-green-800 transition-colors text-lg">
-                    {t.hero.watchDemo}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </header>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          {/* Stats Section */}
-          <section className="py-16 bg-white bg-opacity-90 backdrop-blur-lg">
-            <div className="container mx-auto px-6">
-              <div className="grid md:grid-cols-3 gap-8">
-                {t.stats.map((stat, index) => (
-                  <div key={index} className="text-center space-y-2">
-                    <div className="text-4xl font-bold text-green-700">{stat.number}</div>
-                    <div className="text-gray-600">{stat.label}</div>
-                  </div>
+      {/* CTA Section */}
+      <section className="py-24 bg-green-900 text-white">
+        <div className="container mx-auto px-6 text-center">
+          <div className="max-w-2xl mx-auto space-y-8">
+            <h2 className="text-4xl font-bold">
+              {t.cta.title}
+            </h2>
+            <p className="text-xl text-green-100">
+              {t.cta.subtitle}
+            </p>
+            <Button 
+              variant="white" 
+              className="text-lg"
+              onClick={() => setIsAuthModalOpen(true)}
+            >
+              {t.cta.button}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-green-950 text-white py-16">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-6">
+                <span className="text-2xl">🌿</span>
+                <span className="text-xl font-bold">FarmSmart</span>
+              </div>
+              <p className="text-green-300">
+                {t.footer.tagline}
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="font-bold text-lg mb-4">{t.footer.solutions.title}</h3>
+              <ul className="space-y-2">
+                {t.footer.solutions.items.map((item, index) => (
+                  <li key={index}>
+                    <a href="#" className="text-green-300 hover:text-white transition-colors">
+                      {item}
+                    </a>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-          </section>
 
-          {/* Features Section */}
-          <section className="py-24">
-            <div className="container mx-auto px-6">
-              <h2 className="text-3xl font-bold text-center mb-16 text-green-900">
-                {t.features.title}
-              </h2>
-              <div className="grid md:grid-cols-3 gap-8">
-                {t.features.items.map((feature, index) => (
-                  <div
-                    key={index}
-                    className={`bg-white rounded-lg shadow-lg p-6 transition-all duration-300 ${
-                      hoveredCard === index ? 'transform -translate-y-2' : ''
-                    }`}
-                    onMouseEnter={() => setHoveredCard(index)}
-                    onMouseLeave={() => setHoveredCard(null)}
-                  >
-                    <div className="text-4xl mb-4">{feature.icon}</div>
-                    <h3 className="text-xl font-bold text-green-800 mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
+            <div>
+              <h3 className="font-bold text-lg mb-4">{t.footer.company.title}</h3>
+              <ul className="space-y-2">
+                {t.footer.company.items.map((item, index) => (
+                  <li key={index}>
+                    <a href="#" className="text-green-300 hover:text-white transition-colors">
+                      {item}
+                    </a>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-          </section>
 
-          {/* CTA Section */}
-          <section className="py-24 bg-green-900 text-white">
-            <div className="container mx-auto px-6 text-center">
-              <div className="max-w-2xl mx-auto space-y-8">
-                <h2 className="text-4xl font-bold">
-                  {t.cta.title}
-                </h2>
-                <p className="text-xl text-green-100">
-                  {t.cta.subtitle}
-                </p>
-                <button
-                  onClick={() => setIsAuthModalOpen(true)}
-                  className="px-8 py-3 bg-white text-green-800 rounded-lg hover:bg-gray-100 transition-colors text-lg font-semibold"
-                >
-                  {t.cta.button}
-                </button>
-              </div>
+            <div>
+              <h3 className="font-bold text-lg mb-4">{t.footer.connect.title}</h3>
+              <ul className="space-y-2">
+                {t.footer.connect.items.map((item, index) => (
+                  <li key={index}>
+                    <a href="#" className="text-green-300 hover:text-white transition-colors">
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </section>
-
-          {/* Footer */}
-          <footer className="bg-green-950 text-white py-16">
-            <div className="container mx-auto px-6">
-              <div className="grid md:grid-cols-4 gap-8">
-                <div>
-                  <div className="flex items-center space-x-2 mb-6">
-                    <span className="text-2xl">🌿</span>
-                    <span className="text-xl font-bold">FarmSmart</span>
-                  </div>
-                  <p className="text-green-300">
-                    {t.footer.tagline}
-                  </p>
-                </div>
-
-                {/* Continuing from the footer section */}
-                <div>
-                  <h3 className="font-bold text-lg mb-4">{t.footer.solutions.title}</h3>
-                  <ul className="space-y-2">
-                    {t.footer.solutions.items.map((item, index) => (
-                      <li key={index}>
-                        <a href="#" className="text-green-300 hover:text-white transition-colors">
-                          {item}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-4">{t.footer.company.title}</h3>
-                  <ul className="space-y-2">
-                    {t.footer.company.items.map((item, index) => (
-                      <li key={index}>
-                        <a href="#" className="text-green-300 hover:text-white transition-colors">
-                          {item}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-4">{t.footer.connect.title}</h3>
-                  <ul className="space-y-2">
-                    {t.footer.connect.items.map((item, index) => (
-                      <li key={index}>
-                        <a href="#" className="text-green-300 hover:text-white transition-colors">
-                          {item}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </footer>
-        </>
-      )}
+          </div>
+        </div>
+      </footer>
 
       {/* Auth Modal */}
       {isAuthModalOpen && (
         <div className="fixed inset-0 z-50">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setIsAuthModalOpen(false)} 
-          />
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsAuthModalOpen(false)} />
           <div className="absolute inset-0 overflow-y-auto">
             <div className="min-h-full flex items-center justify-center p-4">
               <div className="relative bg-white rounded-lg w-full max-w-md p-6">
@@ -413,7 +367,7 @@ function App() {
                 </button>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="text-center">
+                <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-900">
                       {mode === 'login' ? t.auth.login.title : t.auth.signup.title}
                     </h2>
@@ -455,12 +409,9 @@ function App() {
                     )}
                   </div>
 
-                  <button
-                    type="submit"
-                    className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-                  >
+                  <Button type="submit" variant="primary" className="w-full">
                     {mode === 'login' ? t.auth.login.button : t.auth.signup.button}
-                  </button>
+                  </Button>
 
                   <div className="text-center text-gray-600">
                     {mode === 'login' ? (
