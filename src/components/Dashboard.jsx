@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Marketplace from './Marketplace';
-
+import Analysis from './Analysis';
 const translations = {
     en: {
         welcome: "Welcome to FarmSmart",
