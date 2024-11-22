@@ -60,7 +60,7 @@ const translations = {
       },
       connect: {
         title: "Connect",
-        items: ["Twitter", "LinkedIn", "info@farmsmart.ai"]
+        items: ["Twitter", "LinkedIn", "info@farmsense.ai"]
       }
     },
     auth: {
